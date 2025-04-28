@@ -1,0 +1,25 @@
+-- Duplicator Script
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Players = game:GetService("Players")
+
+local ItemStorage = ReplicatedStorage:WaitForChild("Items") -- Your items stored in ReplicatedStorage.Items
+
+-- Function to duplicate an item
+local function duplicateItem(player, itemName)
+    local originalItem = ItemStorage:FindFirstChild(itemName)
+    if originalItem then
+        local newItem = originalItem:Clone()
+        newItem.Parent = player.Backpack -- or wherever you want to give the item
+    else
+        warn("Item not found:", itemName)
+    end
+end
+
+-- Example RemoteEvent
+local DuplicateEvent = Instance.new("RemoteEvent")
+DuplicateEvent.Name = "DuplicateItemEvent"
+DuplicateEvent.Parent = ReplicatedStorage
+
+DuplicateEvent.OnServerEvent:Connect(function(player, itemName)
+    duplicateItem(player, itemName)
+end)
